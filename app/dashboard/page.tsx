@@ -174,7 +174,11 @@ export default function DashboardPage() {
                 <tbody className="divide-y divide-gray-100 text-sm">
                   {items.map((item) => (
                     <tr key={item.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-medium text-gray-900">{item.name}</td>
+                      <td className="px-6 py-4 font-medium text-gray-900">
+                        <a href={`./item/${item.id}`}>
+                            {item.name}
+                        </a>
+                      </td>
                       <td className="px-6 py-4">
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${

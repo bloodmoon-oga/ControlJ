@@ -42,18 +42,18 @@ export default function LoginPage() {
       <div className="hidden lg:flex lg:w-1/2 bg-slate-900 text-white flex-col justify-between p-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/30 to-purple-800/30 backdrop-blur-sm" />
         <div className="relative z-10">
-          <span className="text-2xl font-bold tracking-wider">PLATAFORMA</span>
+          <span className="text-2xl font-bold tracking-wider">CONTROL J</span>
         </div>
         <div className="relative z-10 space-y-4">
           <h1 className="text-4xl font-extrabold tracking-tight">
-            Gerencie seus sistemas com precisão.
+            Gerencie seus ativos com qrcode.
           </h1>
           <p className="text-slate-300 max-w-md">
-            Acesse o painel para acompanhar métricas, gerenciar requisições e manter o controle total da sua infraestrutura.
+            Acesse o painel para acompanhar o status a qualquer hora.
           </p>
         </div>
         <div className="relative z-10 text-sm text-slate-400">
-          &copy; {new Date().getFullYear()} Sistema de Controle. Todos os direitos reservados.
+          &copy; {new Date().getFullYear()} 
         </div>
       </div>
 
