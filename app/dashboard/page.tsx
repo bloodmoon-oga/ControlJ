@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+
 interface Item {
   id: string;
   name: string;
@@ -16,11 +17,40 @@ export default function DashboardPage() {
   const [status, setStatus] = useState('Ativo');
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
+  const [order, setOrder] = useState(false);
+  const [cpItems, setCpItems] = useState<Item[]>([]);
   const router = useRouter();
-
+  const states = ['Geral', 'Ativo', 'Pendente', 'Manutenção'];
+  const [iter, setIter] = useState(0)
   useEffect(() => {
     fetchItems();
   }, []);
+
+  function sortItemsByName<T extends { name: string }>(items: T[]): T[] {
+    return [...items].sort((a, b) => {
+        const comparison = a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' })
+
+        return order ? comparison : -comparison;
+      }
+    )
+  }
+
+  function SwitchStatus() {
+    if (states[iter] === 'Geral'){
+      setItems(cpItems)
+    }
+    else{
+      setItems(cpItems.filter((x)=>(x.status === states[iter])));
+    }
+    setIter( (5 + iter ) % 4);
+    console.log(iter)
+  }
+
+
+  const handleSortClick = () => {
+    setItems((prevItems) => sortItemsByName(prevItems))
+    setOrder(!order);
+  }
 
   const fetchItems = async () => {
     try {
@@ -34,6 +64,8 @@ export default function DashboardPage() {
 
       const data = await res.json();
       setItems(data);
+      setCpItems([...data]);
+      console.log(data)
     } catch (err) {
       console.error('Erro ao carregar itens:', err);
     } finally {
@@ -162,13 +194,29 @@ export default function DashboardPage() {
             {loading ? (
               <div className="p-8 text-center text-gray-500">Carregando itens...</div>
             ) : items.length === 0 ? (
-              <div className="p-8 text-center text-gray-500">Nenhum item cadastrado ainda.</div>
+              <div className="p-8 text-center text-gray-500">Nenhum item cadastrado ainda.
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                    <th className="px-6 py-3"><button
+                      onClick={handleSortClick}
+                    >Nome</button></th>
+                    <th className="px-6 py-3"><button
+                      onClick={SwitchStatus}>Status</button></th>
+                  </tr>
+                </thead>
+                </table>
+              </div>
+              
             ) : (
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
-                    <th className="px-6 py-3">Nome</th>
-                    <th className="px-6 py-3">Status</th>
+                    <th className="px-6 py-3"><button
+                      onClick={handleSortClick}
+                    >Nome</button></th>
+                    <th className="px-6 py-3"><button
+                      onClick={SwitchStatus}>Status</button></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 text-sm">
