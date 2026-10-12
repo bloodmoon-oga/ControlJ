@@ -20,7 +20,7 @@ export default function DashboardPage() {
   const [order, setOrder] = useState(false);
   const [cpItems, setCpItems] = useState<Item[]>([]);
   const router = useRouter();
-  const states = ['Geral', 'Ativo', 'Pendente', 'Manutenção'];
+  const states = ['Geral', 'Ativo', 'Pendente', 'Inativo'];
   const [iter, setIter] = useState(0)
   useEffect(() => {
     fetchItems();
@@ -41,6 +41,7 @@ export default function DashboardPage() {
     }
     else{
       setItems(cpItems.filter((x)=>(x.status === states[iter])));
+      console.log(states[iter]);
     }
     setIter( (5 + iter ) % 4);
     console.log(iter)

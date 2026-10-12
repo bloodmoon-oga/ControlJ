@@ -22,7 +22,7 @@ async function getUserIdFromCookie() {
 
 // GET: Busca os itens do usuário
 export async function GET() {
-  const userId = await getUserIdFromCookie();
+  const userId = Number(await getUserIdFromCookie());
 
   if (!userId) {
     return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
@@ -38,7 +38,7 @@ export async function GET() {
 
 // POST: Cria um novo item
 export async function POST(request: Request) {
-  const userId = await getUserIdFromCookie();
+  const userId = Number(await getUserIdFromCookie());
 
   if (!userId) {
     return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });

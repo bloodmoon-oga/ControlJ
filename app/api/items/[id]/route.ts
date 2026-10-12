@@ -24,7 +24,7 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const userId = await getUserIdFromCookie();
+  const userId = Number(await getUserIdFromCookie());
 
   if (!userId) {
     return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
@@ -59,7 +59,7 @@ export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const userId = await getUserIdFromCookie();
+  const userId = Number(await getUserIdFromCookie());
 
   if (!userId) {
     return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
