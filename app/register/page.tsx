@@ -79,7 +79,6 @@ export default function RegisterPage() {
             </label>
             <input
               id="email"
-              nome="email"
               type="email"
               required
               value={email}

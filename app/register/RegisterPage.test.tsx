@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import RegisterPage from "./page";
-
+import { vi } from "vitest";
 // 1. Mockando o roteador do Next.js
 const mockPush = vi.fn();
 vi.mock("next/navigation", () => ({
@@ -16,7 +16,7 @@ describe("RegisterPage Component", () => {
     // Limpa o mock do fetch antes de cada teste
     vi.unstubAllGlobals();
   });
-  it("deve permitir que o usuário digite as credenciais e faça o login com sucesso", async () => {
+  it("Permite que ao se registrar o usuário seja direcionado para a página de registro", async () => {
     // 2. Mockando uma resposta de SUCESSO da API de login
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
