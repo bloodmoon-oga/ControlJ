@@ -18,8 +18,9 @@ model Item {
   id          String   @id @default(uuid())
   name        String
   description String?
+  location    String?   // <- Adicionado para guardar "onde está"
   status      String   @default("Ativo")
-  userId      Int      // <- MUDAR PARA Int
+  userId      Int      
   user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
