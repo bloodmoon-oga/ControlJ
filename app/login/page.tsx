@@ -42,7 +42,10 @@ export default function LoginPage() {
       <div className="hidden lg:flex lg:w-1/2 bg-slate-900 text-white flex-col justify-between p-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/30 to-purple-800/30 backdrop-blur-sm" />
         <div className="relative z-10">
-          <span className="text-2xl font-bold tracking-wider">CONTROL J</span>
+          <span className="flex items-center text-2xl font-bold tracking-wider">
+            <img src="/Logo0.png" width={50} height={50}></img>
+            CONTROL J</span>
+          
         </div>
         <div className="relative z-10 space-y-4">
           <h1 className="text-4xl font-extrabold tracking-tight">
