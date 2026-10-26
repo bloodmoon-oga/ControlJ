@@ -1,13 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import Aside from "@/components/Aside";
 import MeusItems from "@/components/MeusItems";
 import AddItem from "@/components/AddItem";
+import ButtonCompartilhar from "@/components/ButtonCompartilhar";
 
 export default function DashboardPage() {
   const [update, setUpdate] = useState<boolean>();
+  const [cstate, setCstate] = useState<number>(0);
+  const [selectAll, setSelectAll] = useState<number>(0);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -27,7 +30,17 @@ export default function DashboardPage() {
             </div>
           </header>
           <AddItem setUpdate={setUpdate} update={update}></AddItem>
-          <MeusItems update={update}></MeusItems>
+          <MeusItems
+            selectAll={selectAll}
+            update={update}
+            cstate={cstate}
+          ></MeusItems>
+          <ButtonCompartilhar
+            selectAll={selectAll}
+            setSelectAll={setSelectAll}
+            state={cstate}
+            setState={setCstate}
+          ></ButtonCompartilhar>
         </div>
       </main>
     </div>

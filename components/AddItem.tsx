@@ -9,7 +9,7 @@ interface Update {
   setUpdate: Dispatch<SetStateAction<boolean | undefined>>;
   update: boolean | undefined;
 }
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 export default function AddItem({ setUpdate, update }: Update) {
   const [name, setName] = useState("");
   const [status, setStatus] = useState("Ativo");
@@ -42,7 +42,7 @@ export default function AddItem({ setUpdate, update }: Update) {
 
   return (
     <>
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <div className="bg-white p-6 rounded shadow-sm border border-gray-200">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">
           Adicionar Novo Item
         </h3>

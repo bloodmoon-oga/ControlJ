@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import { getUserIdFromCookie } from "@/lib/cookies";
 
 const prisma = new PrismaClient();
 
@@ -16,14 +17,15 @@ export async function POST(request: Request) {
     }
 
     // TODO: Substitua pelo ID do usuário logado na sua sessão atual
-    const currentUserId = 1;
+    const currentUserId = Number(await getUserIdFromCookie());
 
     // Prepara os dados para inserção em massa com Prisma
     const itemsToInsert = items.map((item) => ({
       name: String(item.name || "").trim(),
       description: item.description ? String(item.description) : null,
       location: item.location ? String(item.location) : null,
-      status: item.status ? String(item.status) : "Ativo",
+      status: item.status ? String(item.status) : "Inativo",
+      id: String(item.itemId || "").trim(),
       userId: currentUserId,
     }));
 

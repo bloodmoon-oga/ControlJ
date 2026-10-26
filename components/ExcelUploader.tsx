@@ -46,8 +46,10 @@ export default function ExcelUploader({
 
     reader.onload = (event) => {
       try {
-        const data = new Uint8Array(event.target?.result as ArrayBuffer);
-        const workbook = XLSX.read(data, { type: "array" });
+        const content = event.target?.result as string;
+
+        // Lê o conteúdo de texto diretamente
+        const workbook = XLSX.read(content, { type: "string" });
 
         setSheets(workbook.SheetNames);
         const firstSheetName = workbook.SheetNames[0];
@@ -61,7 +63,8 @@ export default function ExcelUploader({
       }
     };
 
-    reader.readAsArrayBuffer(file);
+    // Alterado para readAsText para tratar codificação de texto corretamente em CSVs
+    reader.readAsText(file, "UTF-8");
   };
 
   // 2. Extrai cabeçalhos e dados

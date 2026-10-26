@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useState, use } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { QRCodeSVG } from 'qrcode.react';
+import { useEffect, useState, use } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { QRCodeSVG } from "qrcode.react";
+import Aside from "@/components/Aside";
 
 interface ItemData {
   id: string;
@@ -13,7 +14,11 @@ interface ItemData {
   createdAt?: string;
 }
 
-export default function ItemDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default function ItemDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   // Desembrulha os parâmetros dinâmicos usando `use()`
   const { id } = use(params);
   const router = useRouter();
@@ -25,9 +30,9 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
   const [success, setSuccess] = useState<string | null>(null);
 
   // Estados dos formulários de edição
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [newId, setNewId] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [newId, setNewId] = useState("");
 
   // Carrega os dados do Item
   useEffect(() => {
@@ -35,19 +40,19 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
       try {
         const res = await fetch(`/api/items/${id}`);
         if (res.status === 401) {
-          router.push('/login');
+          router.push("/login");
           return;
         }
 
         const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.error || 'Falha ao carregar item');
+          throw new Error(data.error || "Falha ao carregar item");
         }
 
         setItem(data);
-        setName(data.name || '');
-        setDescription(data.description || '');
-        setNewId(data.id || '');
+        setName(data.name || "");
+        setDescription(data.description || "");
+        setNewId(data.id || "");
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -67,8 +72,8 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
 
     try {
       const res = await fetch(`/api/items/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
           description,
@@ -79,10 +84,10 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || 'Erro ao salvar alterações');
+        throw new Error(data.error || "Erro ao salvar alterações");
       }
 
-      setSuccess('Item atualizado com sucesso!');
+      setSuccess("Item atualizado com sucesso!");
       setItem(data);
 
       // Se o ID mudou, redireciona para a nova URL do item
@@ -99,70 +104,36 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
   };
 
   const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    router.push('/login');
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
   };
 
   return (
     <div className="flex h-screen bg-gray-100">
       {/* MENU LATERAL */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col justify-between">
-        <div>
-          <div className="p-6 border-b border-slate-800">
-            <h1 className="text-xl font-bold tracking-wide text-blue-400">
-              ControlJ System
-            </h1>
-          </div>
-          <nav className="mt-6 px-4 space-y-2">
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              Home
-            </Link>
-
-            <Link
-              href="/scan"
-              className="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
-              </svg>
-              Ler QR Code
-            </Link>
-          </nav>
-        </div>
-
-        <div className="p-4 border-t border-slate-800">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-red-400 bg-slate-800 hover:bg-red-600 hover:text-white rounded-lg transition-colors"
-          >
-            Sair da conta
-          </button>
-        </div>
-      </aside>
-
+      <Aside></Aside>
       {/* ÁREA PRINCIPAL */}
       <main className="flex-1 overflow-y-auto p-8 text-black">
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <Link href="/dashboard" className="text-sm text-blue-600 hover:underline flex items-center gap-1 mb-2">
+              <Link
+                href="/dashboard"
+                className="text-sm text-blue-600 hover:underline flex items-center gap-1 mb-2"
+              >
                 ← Voltar para a lista
               </Link>
-              <h2 className="text-2xl font-bold text-gray-800">Detalhes do Item</h2>
+              <h2 className="text-2xl font-bold text-gray-800">
+                Detalhes do Item
+              </h2>
             </div>
 
             {item && (
               <span
                 className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                  item.status === 'Ativo'
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-yellow-100 text-yellow-800'
+                  item.status === "Ativo"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-yellow-100 text-yellow-800"
                 }`}
               >
                 {item.status}
@@ -182,7 +153,9 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* FORMULÁRIO DE EDIÇÃO */}
               <div className="md:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Editar Dados</h3>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                  Editar Dados
+                </h3>
 
                 {error && (
                   <div className="mb-4 p-3 bg-red-100 text-red-800 text-sm rounded-lg border border-red-200">
@@ -209,7 +182,8 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono text-sm"
                     />
                     <p className="text-xs text-gray-400 mt-1">
-                      Atenção: alterar o ID mudará o código QR associado a este item.
+                      Atenção: alterar o ID mudará o código QR associado a este
+                      item.
                     </p>
                   </div>
 
@@ -245,7 +219,7 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
                       disabled={saving}
                       className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-lg transition-colors disabled:opacity-50"
                     >
-                      {saving ? 'Salvando...' : 'Salvar Alterações'}
+                      {saving ? "Salvando..." : "Salvar Alterações"}
                     </button>
                   </div>
                 </form>
@@ -254,9 +228,12 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
               {/* CARD DO QR CODE */}
               <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-col items-center justify-between text-center">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-800 mb-2">QR Code do Item</h3>
+                  <h3 className="text-lg font-bold text-gray-800 mb-2">
+                    QR Code do Item
+                  </h3>
                   <p className="text-xs text-gray-500 mb-4">
-                    Este código é utilizado na página de leitura para ativar o item.
+                    Este código é utilizado na página de leitura para ativar o
+                    item.
                   </p>
                 </div>
 
