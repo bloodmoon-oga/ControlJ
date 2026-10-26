@@ -180,7 +180,7 @@ export default function MeusItems({ update, cstate, selectAll }: Update) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          targetUserId: Number(targetUserId),
+          targetUserTag: String(targetUserId),
           itemIds: selectItems, // Array com os IDs dos itens selecionados na tabela
         }),
       });

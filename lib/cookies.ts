@@ -17,3 +17,17 @@ export async function getUserIdFromCookie() {
     return null;
   }
 }
+
+export async function getUserTagFromCookie() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth_token")?.value;
+
+  if (!token) return null;
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as { userTag: string };
+    return decoded.userTag;
+  } catch {
+    return null;
+  }
+}

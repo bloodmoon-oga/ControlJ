@@ -1,23 +1,25 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getUserIdFromCookie } from "@/lib/cookies";
+import { getUserTagFromCookie, getUserIdFromCookie } from "@/lib/cookies";
 
 export async function POST(request: Request) {
   try {
     // 1. Pega o ID do usuário logado através do cookie
-    const currentUserId = Number(await getUserIdFromCookie());
+    const currentUserTag = String(await getUserTagFromCookie());
+    const currentUserID = Number(await getUserIdFromCookie());
 
-    if (!currentUserId) {
+    if (!currentUserTag) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
 
     // 2. Recebe os dados do corpo da requisição (ID do usuário destino e os IDs dos itens)
     const body = await request.json();
-    const { targetUserId, itemIds } = body;
+    console.log(body);
+    const { targetUserTag, itemIds } = body;
 
     // 3. Validações básicas
     if (
-      !targetUserId ||
+      !targetUserTag ||
       !itemIds ||
       !Array.isArray(itemIds) ||
       itemIds.length === 0
@@ -31,10 +33,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const parsedTargetUserId = Number(targetUserId);
+    const parsedTargetUserTag = String(targetUserTag);
 
     // Impede transferir para si mesmo
-    if (parsedTargetUserId === currentUserId) {
+    if (parsedTargetUserTag === currentUserTag) {
       return NextResponse.json(
         { error: "Você não pode transferir itens para si mesmo." },
         { status: 400 },
@@ -43,7 +45,7 @@ export async function POST(request: Request) {
 
     // 4. Verifica se o usuário de destino realmente existe no banco
     const targetUser = await prisma.user.findUnique({
-      where: { id: parsedTargetUserId },
+      where: { tag: parsedTargetUserTag },
     });
 
     if (!targetUser) {
@@ -58,10 +60,10 @@ export async function POST(request: Request) {
     const updateResult = await prisma.item.updateMany({
       where: {
         id: { in: itemIds },
-        userId: currentUserId,
+        userId: currentUserID,
       },
       data: {
-        userId: parsedTargetUserId,
+        userId: targetUser.id,
       },
     });
 

@@ -10,6 +10,7 @@ model User {
   id       Int    @id @default(autoincrement())
   email    String @unique
   password String
+  tag      String @unique
   name     String?
   items    Item[]
 }
@@ -21,6 +22,7 @@ model Item {
   location    String?   // <- Adicionado para guardar "onde está"
   status      String   @default("Ativo")
   userId      Int      
+
   user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
