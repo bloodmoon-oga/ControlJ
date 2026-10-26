@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getUserIdFromCookie } from "@/lib/cookies";
 
 export async function GET(
   request: Request,
@@ -7,6 +8,11 @@ export async function GET(
 ) {
   try {
     const { tag } = await params;
+    const userId = await getUserIdFromCookie();
+
+    if (!userId) {
+      return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+    }
 
     if (!tag) {
       return NextResponse.json(

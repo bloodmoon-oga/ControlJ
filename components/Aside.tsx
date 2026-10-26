@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Aside() {
   const router = useRouter();
@@ -12,6 +13,18 @@ export default function Aside() {
     router.push("/login");
   };
 
+  const [tag, setTag] = useState("#000000");
+
+  async function getTag() {
+    const res = await fetch("/api/auth/mytag");
+    const myTag = await res.json();
+    console.log(myTag);
+    setTag(myTag.tag || "#000");
+  }
+
+  useEffect(() => {
+    getTag();
+  }, []);
   // Função auxiliar para verificar se o link é o ativo
   const isActive = (path: string) => pathname === path;
 
@@ -23,16 +36,28 @@ export default function Aside() {
             ControlJ System
           </h1>
         </div>
-        
+
         <nav className="mt-6 px-4 space-y-2">
           <Link
             href="/dashboard"
             className={`${
-              isActive("/dashboard") ? "bg-blue-600" : "hover:bg-slate-800 text-slate-300"
+              isActive("/dashboard")
+                ? "bg-blue-600"
+                : "hover:bg-slate-800 text-slate-300"
             } flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-white shadow-sm transition-colors`}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              />
             </svg>
             Home
           </Link>
@@ -40,11 +65,23 @@ export default function Aside() {
           <Link
             href="/scan"
             className={`${
-              isActive("/scan") ? "bg-blue-600" : "hover:bg-slate-800 text-slate-300"
+              isActive("/scan")
+                ? "bg-blue-600"
+                : "hover:bg-slate-800 text-slate-300"
             } flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-white shadow-sm transition-colors`}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 4v1m0 14v1m8-8h-1M5 12H4m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"
+              />
             </svg>
             Ler QR Code
           </Link>
@@ -52,11 +89,23 @@ export default function Aside() {
           <Link
             href="/importar"
             className={`${
-              isActive("/importar") ? "bg-blue-600" : "hover:bg-slate-800 text-slate-300"
+              isActive("/importar")
+                ? "bg-blue-600"
+                : "hover:bg-slate-800 text-slate-300"
             } flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-white shadow-sm transition-colors`}
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+              />
             </svg>
             Importar planilha
           </Link>
@@ -64,6 +113,27 @@ export default function Aside() {
       </div>
 
       <div className="p-4 border-t border-slate-800">
+        <div className="space-y-1.5">
+          <label
+            htmlFor="tag"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Sua Tag de Compartilhamento
+          </label>
+          <div className="relative">
+            <input
+              id="tag"
+              type="text"
+              readOnly
+              value={tag}
+              className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm font-mono font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 select-all shadow-sm"
+            />
+          </div>
+          <p className="text-xs text-gray-500">
+            Passe esta tag para outro usuário caso queira transferir itens para
+            ele.
+          </p>
+        </div>
         <button
           onClick={handleLogout}
           className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-red-400 bg-slate-800 hover:bg-red-600 hover:text-white rounded-lg transition-colors"
